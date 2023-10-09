@@ -1,0 +1,12 @@
+# workflows can be reusable
+# for a workflow to be resuable it must be callable
+# that is where the on keyword becomes important
+# to use a workflow inside of other workflows we set on to workflow_call
+name: Reusable deploy
+on: workflow_call
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Output info
+              runs: echo "Deploying and uploading..."
