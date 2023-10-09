@@ -90,11 +90,13 @@ jobs:
   report:
     # this job only runs if any other job fails
     if: failure()
+    # it won't just look at lint and deploy
+    # but all the jobs deploy and lint may depend on also
     needs: [lint, deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Output information
         run: |
           echo "Something went wrong"
-          echo "$ {{ github }}"
+          echo "$ {{ toJson(github) }}"
 
