@@ -90,6 +90,7 @@ jobs:
   report:
     # this job only runs if any other job fails
     if: failure()
+    needs: [lint, deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Output information
