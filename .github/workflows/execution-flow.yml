@@ -41,7 +41,13 @@ jobs:
         # if the test step fails then we will run this step
         # we don't want to upload the test report if the 
         # tests run successfully
-        if: steps.run-tests.outcome == 'failure'
+        # failure() is a special function
+        # it is one of four
+        # failure() -> always returns true if an previous step or job fails
+        # success() -> always returns true when none of the previous steps have failed
+        # always() -> always returns true
+        # cancelled() -> always returns true when a workflow has been cancelled
+        if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: test-report
