@@ -5,11 +5,16 @@
 name: Reusable deploy
 on: 
     workflow_call:
+        # you describe the inputs for the reusable workflow
         inputs: 
             artifact-name:
                 description: The name of the deployable artifact files
                 required: true
                 type: string
+        # you can specify secrets for the reusable workflow
+        secrets:
+            some-secret:
+                required: true
 jobs:
     deploy:
         runs-on: ubuntu-latest

@@ -68,10 +68,14 @@ jobs:
           path: dist
   deploy:
     needs: build
+    # specify the reusable workflow
     uses: ./.github/workflows/reusable.yml
     # provide the reusable workflow input values
     with:
       artifact-name: dist-files
+    # pass a secret to your workflow
+    secrets:
+      # some-secret: $ {{ secret.some-secret }}
   report:
     if: failure()
     needs: [lint, deploy]
