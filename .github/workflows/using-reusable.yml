@@ -71,7 +71,7 @@ jobs:
     uses: ./.github/workflows/reusable.yml
     # provide the reusable workflow input values
     with:
-      artifact-name: dist-filse
+      artifact-name: dist-files
   report:
     if: failure()
     needs: [lint, deploy]
