@@ -3,10 +3,23 @@
 # that is where the on keyword becomes important
 # to use a workflow inside of other workflows we set on to workflow_call
 name: Reusable deploy
-on: workflow_call
+on: 
+    workflow_call:
+        inputs: 
+            artifact-name:
+                description: The name of the deployable artifact files
+                required: true
+                type: string
 jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
+            - name: Get code
+              uses: actions/download-artifact@v3
+              with:
+                # get the artifact-name from the inputs context object
+                name: ${{ inputs.artifact-name }}
+            - name: List files
+              run: ls
             - name: Output info
               run: echo "Deploying and uploading..."
