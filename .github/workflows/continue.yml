@@ -16,9 +16,6 @@ jobs:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        # here we are checking if there was a cache hit
-        # if there was a cache hit then we don't want to 
-        # run this step
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
@@ -38,21 +35,13 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
-        # add id to refer to this step
+        # continue-on-error will go on to the next step
+        # if this step fails
+        continue-on-error: true
         id: run-tests
         run: npm run test
       - name: Upload test report
-        # we add a conditional
-        # if the test step fails then we will run this step
-        # we don't want to upload the test report if the 
-        # tests run successfully
-        # failure() is a special function
-        # it is one of four
-        # failure() -> always returns true if an previous step or job fails
-        # success() -> always returns true when none of the previous steps have failed
-        # always() -> always returns true
-        # cancelled() -> always returns true when a workflow has been cancelled
-        if: failure() && steps.run-tests.outcome == 'failure'
+        # if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: test-report
@@ -92,12 +81,8 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
-  # Jobs can also be conditional
   report:
-    # this job only runs if any other job fails
     if: failure()
-    # it won't just look at lint and deploy
-    # but all the jobs deploy and lint may depend on also
     needs: [lint, deploy]
     runs-on: ubuntu-latest
     steps:
